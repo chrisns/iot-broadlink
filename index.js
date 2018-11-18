@@ -14,21 +14,27 @@ const update_thing = async (thingName, payload) => iotdata.updateThingShadow({
 }).promise()
 
 b.on("deviceReady", async dev => {
-  const thingName = dev.mac.toString('hex')
   const thing = {
-    manufacturer: "broadlink",
-    model: dev.type,
-    ip: dev.host.address,
+    thingName: `broadlink_${dev.mac.toString('hex')}`,
+    thingTypeName: "broadlink",
+    attributePayload: {
+      attributes:
+      {
+        model: dev.type,
+        ip: dev.host.address,
+      }
+    }
   }
+
   try {
-    await iot.updateThing(thingName).promise()
+    await iot.updateThing(thing).promise()
   } catch (error) {
-    await iot.createThing(thingName).promise()
+    await iot.createThing(thing).promise()
   }
 
   if (dev.type === "A1") {
     dev.on("payload", (err, payload) =>
-      update_thing(thingName, { temperature: (payload[0x4] * 10 + payload[0x5]) / 10.0, humidity: (payload[0x6] * 10 + payload[0x7]) / 10.0, light: payload[0x8], air_quality: payload[0x0a], noise: payload[0xc] })
+      update_thing(thing.thingName, { temperature: (payload[0x4] * 10 + payload[0x5]) / 10.0, humidity: (payload[0x6] * 10 + payload[0x7]) / 10.0, light: payload[0x8], air_quality: payload[0x0a], noise: payload[0xc] })
     )
     setInterval(() => dev.check_sensors(), POLLING_TIME || 60000)
   }
@@ -38,7 +44,7 @@ b.on("deviceReady", async dev => {
   //   )
   //   setInterval(() => dev.checkData(), POLLING_TIME)
   // }
-  console.log("found device", thingName, thing)
+  console.log("found device", thing.thingName, thing)
 });
 
 b.discover();
