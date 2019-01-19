@@ -6,6 +6,10 @@
 
 Wire up the cheap broadlink devices to aws-iot
 
+## Devices supported
+ - [x] A1
+ - [ ] RM2
+
 To start either:
 ```bash
 npm install
