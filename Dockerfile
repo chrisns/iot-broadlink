@@ -1,14 +1,7 @@
-FROM node:alpine as builder
-RUN apk add --no-cache git
-WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
-RUN npm i --silent
-RUN npm audit fix
-
 FROM node:alpine
-COPY --from=builder /app /app
-WORKDIR /app 
+WORKDIR /app
+COPY package.json ./
+RUN npm install && npm audit fix
 COPY index.js .
 USER node
 CMD npm start
