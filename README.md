@@ -83,7 +83,7 @@ You can then send that code back to test you can now control that device:
 {
   "state": {
     "desired": {
-    "sendData": "&\u0000SOMETHING LIKE THIS\u0000"
+      "sendData": "&\u0000SOMETHING LIKE THIS\u0000"
     }
   }
 }
