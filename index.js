@@ -5,18 +5,20 @@ const iot = new Iot()
 
 const { POLLING_TIME = 30 } = process.env
 
+const event_handler = (event, thing_name) => {
+  console.log(thing_name, event)
+}
+
 b.on("deviceReady", async dev => {
-
-  iot.discovered({
-    name: `broadlink_${dev.mac.toString('hex')}`,
-    type: "broadlink",
-    attributes: {
-      model: dev.type,
-      ip: dev.host.address,
-    }
-  })
-
   if (dev.type === "A1") {
+    await iot.discovered({
+      name: `broadlink_${dev.mac.toString('hex')}`,
+      type: "broadlink",
+      attributes: {
+        model: dev.type,
+        ip: dev.host.address,
+      }
+    })
     dev.on("payload", (err, payload) =>
       iot.report(`broadlink_${dev.mac.toString('hex')}`, {
         temperature: (payload[0x4] * 10 + payload[0x5]) / 10.0,
@@ -25,15 +27,37 @@ b.on("deviceReady", async dev => {
         air_quality: payload[0x0a],
         noise: payload[0xc]
       }))
-    setInterval(() => dev.check_sensors(), POLLING_TIME * 1000 || 60000)
+    setInterval(() => dev.check_sensors(), POLLING_TIME * 1000)
   }
-  // if (dev.type === "RM2") {
-  //   dev.on("rawData", (err, rawData) =>
-  //     publish(dev.mac.toString('hex'), { rawData: rawData })
-  //   )
-  //   setInterval(() => dev.checkData(), POLLING_TIME)
-  // }
-  console.log("found device", thing.thingName, thing)
+  console.log(dev.type)
+
+  if (dev.type === "RM2") {
+    await iot.discovered({
+      name: `broadlink_${dev.mac.toString('hex')}`,
+      type: "broadlink",
+      attributes: {
+        model: dev.type,
+        ip: dev.host.address,
+      }
+    }, payload => {
+      if (payload.enterLearning === true)
+        dev.enterLearning()
+
+      if (payload.checkData === true)
+        dev.checkData()
+
+      if (payload.sendData)
+        dev.sendData(Buffer.from(payload.sendData, 'binary'))
+    })
+    dev.on("rawData", rawData => {
+      iot.report(`broadlink_${dev.mac.toString('hex')}`, {
+        lastreceived: rawData.toString('binary')
+      })
+    })
+
+  }
 })
+
+
 
 b.discover()

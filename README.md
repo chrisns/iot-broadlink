@@ -40,3 +40,53 @@ export AWS_SECRET_ACCESS_KEY=xxx
 export AWS_IOT_ENDPOINT_HOST=xxx
 docker deploy --compose-file docker-compose.yml ble
 ```
+
+# To learn a new IR code:
+
+Publish:
+
+```json
+{
+  "state": {
+    "desired": {
+      "enterLearning":true
+    }
+  }
+}
+```
+
+Push the button on the original remote; then publish:
+
+```json
+{
+  "state": {
+    "desired": {
+      "checkData":true
+    }
+  }
+}
+```
+
+You'll then find:
+
+```json
+{
+  "reported": {
+    "lastreceived": "&\u0000SOMETHING LIKE THIS\u0000"
+  }
+}
+```
+
+You can then send that code back to test you can now control that device:
+
+```json
+{
+  "state": {
+    "desired": {
+    "sendData": "&\u0000SOMETHING LIKE THIS\u0000"
+    }
+  }
+}
+```
+
+And now rejoice for you have iot-ified an IR device.
