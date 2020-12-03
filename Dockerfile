@@ -1,4 +1,5 @@
 FROM node:alpine as build
+LABEL org.opencontainers.image.source https://github.com/chrisns/iot-broadlink
 WORKDIR /app
 RUN apk add --no-cache git
 COPY package.json package-lock.json ./
