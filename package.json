@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/chrisns/iot-broadlink#readme",
   "dependencies": {
-    "@chrisns/iot-shorthand": "^1.0.769",
+    "@chrisns/iot-shorthand": "^1.0.772",
     "broadlinkjs": "github:chrisns/broadlinkjs#add-support-for-RM-Pro-Plus"
   }
 }
