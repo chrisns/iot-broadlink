@@ -25,6 +25,14 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
 
+      - name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ${GITHUB_REPOSITORY},ghcr.io/${GITHUB_REPOSITORY}
+          tag-sha: true
+          tag-edge: true
+
       - name: Prepare
         id: prepare
         run: |
@@ -40,3 +48,4 @@ jobs:
           platforms: linux/arm64,linux/amd64,linux/arm/v6,linux/arm/v7
           push: ${{ github.ref == 'refs/heads/master' }}
           tags: ${{ steps.prepare.outputs.TAGS }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
