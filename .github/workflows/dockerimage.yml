@@ -32,6 +32,7 @@ jobs:
           images: ${{ github.repository }},ghcr.io/${{ github.repository }}
           tag-sha: true
           tag-edge: true
+          tag-custom: ${{ github.ref == 'refs/heads/master' && 'latest' || '' }}
 
       - name: Prepare
         id: prepare
