@@ -23,8 +23,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
 
-      - name: Docker meta
-        id: docker_meta
+      - id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: ${{ github.repository }},ghcr.io/${{ github.repository }}
