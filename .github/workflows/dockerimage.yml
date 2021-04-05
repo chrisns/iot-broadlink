@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1
+        uses: crazy-max/ghaction-docker-meta@v2.2.0
         with:
           images: ${{ github.repository }},ghcr.io/${{ github.repository }}
           tag-sha: true
