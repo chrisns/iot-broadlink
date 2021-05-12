@@ -7,7 +7,7 @@ RUN npm install
 RUN npm audit fix
 COPY index.js .
 
-FROM node:16.0.1-alpine as run
+FROM node:16.1.0-alpine as run
 COPY --from=build /app /app
 WORKDIR /app
 
