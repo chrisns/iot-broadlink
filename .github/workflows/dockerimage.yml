@@ -31,7 +31,7 @@ jobs:
           tag-custom: ${{ github.ref == 'refs/heads/master' && 'latest' || '' }}
 
       - name: build+push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v2.4.0
         with:
           platforms: linux/arm64,linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
