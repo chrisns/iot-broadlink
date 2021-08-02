@@ -1,4 +1,4 @@
-FROM node:16.5.0-alpine as build
+FROM node:16.6.0-alpine as build
 LABEL org.opencontainers.image.source https://github.com/chrisns/iot-broadlink
 WORKDIR /app
 RUN apk add --no-cache git
@@ -7,7 +7,7 @@ RUN npm install
 RUN npm audit fix
 COPY index.js .
 
-FROM node:16.5.0-alpine as run
+FROM node:16.6.0-alpine as run
 COPY --from=build /app /app
 WORKDIR /app
 
